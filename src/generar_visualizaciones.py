@@ -1,7 +1,7 @@
 """
 Módulo: src.generar_visualizaciones
-Descripción: Genera gráficos de alta resolución (300 DPI) para el portfolio
-de Lovable, GitHub README y reportes ejecutivos para reclutadores.
+Descripción: Generación de visualizaciones ejecutivas de alta resolución (300 DPI)
+para el análisis de retención de clientes y presentación de resultados.
 """
 
 import sqlite3
@@ -12,7 +12,7 @@ import seaborn as sns
 
 
 def configurar_estilo_graficos():
-    """Aplica una estética profesional, limpia y ejecutiva."""
+    """Aplica una estética visual limpia, profesional y consistente."""
     plt.rcParams["font.sans-serif"] = "DejaVu Sans"
     plt.rcParams["font.family"] = "sans-serif"
     sns.set_theme(style="whitegrid", palette="muted")
@@ -48,7 +48,7 @@ def generar_grafico_1(conexion: sqlite3.Connection, ruta_salida: Path):
 
     fig, ax1 = plt.subplots(figsize=(10, 5.5), dpi=300)
 
-    # Colores: destacar el grupo de mayor riesgo en coral
+    # Colores: destacar el grupo de mayor riesgo en coral oscuro
     colores = ["#d90429" if i == 0 else "#2b2d42" for i in range(len(df))]
     barras = ax1.bar(df["segmento"], df["mrr_perdido"], color=colores, width=0.6, alpha=0.9)
 
@@ -57,7 +57,6 @@ def generar_grafico_1(conexion: sqlite3.Connection, ruta_salida: Path):
     ax1.grid(axis="y", linestyle="--", alpha=0.6)
     plt.xticks(rotation=20, ha="right", fontsize=9)
 
-    # Etiquetas con montos y porcentaje de churn
     for i, (barra, tasa, mrr) in enumerate(zip(barras, df["tasa_churn"], df["mrr_perdido"])):
         altura = barra.get_height()
         ax1.annotate(
@@ -76,7 +75,7 @@ def generar_grafico_1(conexion: sqlite3.Connection, ruta_salida: Path):
     plt.tight_layout()
     fig.savefig(ruta_salida, dpi=300)
     plt.close(fig)
-    print(f"  ✔ Gráfico 1 guardado: {ruta_salida.name}")
+    print(f"  ✔ Gráfico 1 generado: {ruta_salida.name}")
 
 
 def generar_grafico_2(conexion: sqlite3.Connection, ruta_salida: Path):
@@ -97,7 +96,6 @@ def generar_grafico_2(conexion: sqlite3.Connection, ruta_salida: Path):
 
     fig, ax = plt.subplots(figsize=(10, 6), dpi=300)
 
-    # Resaltar en rojo los casos más críticos
     colores = ["#d90429" if "Fiber optic + Electronic check" in c else "#457b9d" if "Fiber" in c else "#a8dadc" for c in df["combinacion"]]
     barras = ax.barh(df["combinacion"], df["tasa_churn"], color=colores, height=0.65)
 
@@ -122,7 +120,7 @@ def generar_grafico_2(conexion: sqlite3.Connection, ruta_salida: Path):
     plt.tight_layout()
     fig.savefig(ruta_salida, dpi=300)
     plt.close(fig)
-    print(f"  ✔ Gráfico 2 guardado: {ruta_salida.name}")
+    print(f"  ✔ Gráfico 2 generado: {ruta_salida.name}")
 
 
 def generar_grafico_3(conexion: sqlite3.Connection, ruta_salida: Path):
@@ -172,12 +170,11 @@ def generar_grafico_3(conexion: sqlite3.Connection, ruta_salida: Path):
     plt.tight_layout()
     fig.savefig(ruta_salida, dpi=300)
     plt.close(fig)
-    print(f"  ✔ Gráfico 3 guardado: {ruta_salida.name}")
+    print(f"  ✔ Gráfico 3 generado: {ruta_salida.name}")
 
 
 def generar_grafico_4(conexion: sqlite3.Connection, ruta_salida: Path):
     """Gráfico 4: Impacto económico y ROI de la campaña de retención."""
-    # Valores proyectados desde la consulta 4
     conceptos = [
         "Fuga Anual\nActual (100%)",
         "Ingreso Anual\nRecuperado (25%)",
@@ -191,7 +188,7 @@ def generar_grafico_4(conexion: sqlite3.Connection, ruta_salida: Path):
     barras = ax.bar(conceptos, montos, color=colores, width=0.55)
 
     ax.set_ylabel("Valor Económico ($ USD)", fontsize=11, fontweight="bold")
-    ax.set_title("Simulación Financiera y ROI de la Campaña de Retención", fontsize=13, fontweight="bold", pad=15)
+    ax.set_title("Simulación Financiera y Retorno de Inversión (ROI)", fontsize=13, fontweight="bold", pad=15)
     ax.grid(axis="y", linestyle="--", alpha=0.6)
 
     for i, (barra, monto) in enumerate(zip(barras, montos)):
@@ -215,7 +212,7 @@ def generar_grafico_4(conexion: sqlite3.Connection, ruta_salida: Path):
     plt.tight_layout()
     fig.savefig(ruta_salida, dpi=300)
     plt.close(fig)
-    print(f"  ✔ Gráfico 4 guardado: {ruta_salida.name}")
+    print(f"  ✔ Gráfico 4 generado: {ruta_salida.name}")
 
 
 def generar_todas_las_visualizaciones(ruta_bd: Path = None, carpeta_salidas: Path = None):
@@ -232,7 +229,7 @@ def generar_todas_las_visualizaciones(ruta_bd: Path = None, carpeta_salidas: Pat
         raise FileNotFoundError(f"No existe la base de datos en {ruta_bd}. Ejecuta primero cargar_datos.py.")
 
     print("=" * 70)
-    print(" GENERACIÓN DE VISUALIZACIONES PARA RECRUITERS & PORTFOLIO LOVABLE ")
+    print(" GENERACIÓN DE VISUALIZACIONES EJECUTIVAS ")
     print("=" * 70)
 
     configurar_estilo_graficos()
@@ -244,9 +241,8 @@ def generar_todas_las_visualizaciones(ruta_bd: Path = None, carpeta_salidas: Pat
     generar_grafico_4(conexion, carpeta_salidas / "grafico_04_simulacion_roi.png")
 
     conexion.close()
-    print("✔ Todas las visualizaciones se exportaron en alta definición (outputs/).\n")
+    print("✔ Visualizaciones exportadas con éxito en outputs/.\n")
 
 
 if __name__ == "__main__":
     generar_todas_las_visualizaciones()
-

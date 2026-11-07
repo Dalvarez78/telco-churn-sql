@@ -1,27 +1,30 @@
-# Informe Ejecutivo de Retención: Telco Customer Churn
+# Informe Ejecutivo: Análisis Estratégico de Retención y Fuga de Ingresos
 
-> **Declaración del Rol:** *Ayudo a los equipos de Marketing, Producto y Retención a blindar el flujo de ingresos recurrentes (MRR) identificando segmentos críticos de fuga de clientes mediante análisis avanzado en SQL.*
+> **Autor:** David Álvarez  
+> **Especialidad:** Análisis de Datos & Ingeniería Analítica  
+> **Objetivo:** *Identificar con precisión quirúrgica el foco principal de pérdida de ingresos recurrentes (MRR) por abandono de clientes en telecomunicaciones y modelar una estrategia cuantitativa de retención de alto retorno.*
 
 ---
 
-## 1. Resumen Ejecutivo y Pregunta de Negocio
+## 1. Contexto de Negocio y Pregunta Central
 
-En la industria de telecomunicaciones, el coste de adquisición de clientes (CAC) supera con creces el coste de retención. En este estudio analizo la telemetría de **7,043 clientes**, identificando la fuga de ingresos (*churn*) y diseñando una estrategia cuantitativa de alto impacto.
+En la industria de suscripciones, retener a un cliente existente es considerablemente más rentable que adquirir uno nuevo. En este análisis examino el comportamiento de **7,043 clientes** de telecomunicaciones mediante SQL relacional y Python para responder a una necesidad comercial crítica:
 
-* **Pregunta Central:** ¿Qué combinación de contrato y antigüedad concentra la mayor fuga mensual de ingresos, cuáles son los factores causales que la aceleran y qué retorno sobre la inversión (ROI) ofrece una campaña de retención temprana?
+* **Pregunta Central:** ¿Qué combinación de tipo de contrato y antigüedad concentra la mayor fuga mensual de ingresos (MRR), qué factores operativos la causan y cuál es el impacto financiero neto de una campaña de retención proactiva?
 
-### Principales Indicadores Clave (KPIs)
+### Indicadores Clave del Negocio (KPIs)
 - **Fuga Total de Ingresos (MRR):** $139,130.85 USD / mes ($1,669,570.20 USD anualizados).
-- **Foco Crítico:** Contratos mes a mes de 0 a 6 meses concentran **$49,681.30 USD/mes** (35.7% de la pérdida total).
-- **Tasa de Abandono en el Foco:** **55.2%** de abandono temprano (780 de 1,413 clientes cancelan en el primer semestre).
-- **Nicho Más Crítico:** Fibra Óptica + Cheque Electrónico alcanza **75.5% de churn**.
-- **ROI Proyectado de Retención:** **+1,233%** rescatando solo al 25% de los clientes en riesgo.
+- **Foco de Mayor Riesgo:** Clientes con contrato mensual y 0-6 meses de antigüedad concentran **$49,681.30 USD/mes** (el 35.7% de todas las pérdidas de la compañía).
+- **Tasa de Abandono en el Foco:** **55.2%** de abandono temprano (780 bajas en 1,413 clientes nuevos).
+- **Segmento Más Crítico:** Fibra Óptica + Cheque Electrónico alcanza un **75.5% de abandono**.
+- **Factor Causal:** El 76% de los clientes cancelados en este segmento carecía de soporte técnico y seguridad online.
+- **Retorno de Inversión (ROI Proyectado):** **+1,233.3%** rescatando al 25% de los clientes en riesgo.
 
 ---
 
 ## 2. Fuga de Ingresos por Tipo de Contrato y Antigüedad
 
-Evaluación del impacto financiero directo según la permanencia pactada y los meses de relación comercial con la empresa.
+Analizo el impacto económico mensual según el tipo de permanencia y el rango de permanencia en meses del cliente:
 
 | tipo_contrato  | rango_antiguedad | total_clientes | clientes_cancelados | tasa_churn_pct | ingresos_mensuales_perdidos | pct_del_total_fuga |
 | -------------- | ---------------- | -------------- | ------------------- | -------------- | --------------------------- | ------------------ |
@@ -40,15 +43,15 @@ Evaluación del impacto financiero directo según la permanencia pactada y los m
 
 ![Fuga Mensual de Ingresos](grafico_01_mrr_perdido_contrato.png)
 
-### Hallazgos de la Consulta 1:
-- **Concentración del Riesgo:** El 55.2% de los clientes en contratos mensuales se dan de baja en los primeros 6 meses.
-- **Efecto Blindaje:** Los contratos de 1 y 2 años muestran tasas de churn inferiores al 12% y 3% respectivamente, demostrando que la permanencia contractual es el mayor escudo de retención.
+### Conclusiones de este Paso:
+- **Concentración Crítica:** Más de un tercio de las pérdidas de dinero de la compañía proviene de usuarios sin permanencia en su primer semestre.
+- **Efecto Blindaje de la Permanencia:** En contratos anuales y bianuales, el abandono cae por debajo del 12% y 3% respectivamente, demostrando que asegurar la permanencia es el mecanismo de retención más sólido.
 
 ---
 
-## 3. Radiografía del Segmento Crítico: Servicios y Fricción de Pago
+## 3. Radiografía del Segmento Crítico: Servicios y Canal de Pago
 
-Filtrando exclusivamente la cohorte más vulnerable (contrato mes a mes, antigüedad $\le$ 6 meses), analizamos la intersección de servicios de conectividad y canales de recaudación.
+Aislando exclusivamente la cohorte vulnerable (contrato mes a mes y $\le$ 6 meses), profundizo en el cruce de conectividad y método de facturación:
 
 | servicio_internet | metodo_pago               | total_clientes | cancelaciones | tasa_churn_pct | mrr_perdido_segmento | cuota_mensual_promedio |
 | ----------------- | ------------------------- | -------------- | ------------- | -------------- | -------------------- | ---------------------- |
@@ -67,15 +70,15 @@ Filtrando exclusivamente la cohorte más vulnerable (contrato mes a mes, antigü
 
 ![Segmento Crítico por Servicio y Pago](grafico_02_segmento_riesgo_pago.png)
 
-### Hallazgos de la Consulta 2:
-- **Fibra Óptica:** Tiene una cuota mensual más elevada (~$80-$90 USD/mes), lo que incrementa la sensibilidad al precio en los primeros meses.
-- **Cheque Electrónico (`Electronic check`):** Es un método de pago manual no automatizado. Cada mes el cliente experimenta 'fricción de pago', evaluando conscientemente si renovar o cancelar. Esto dispara el abandono al **75.5%** (332 cancelaciones en 440 clientes).
+### Conclusiones de este Paso:
+- **Impacto de la Tarifa de Fibra:** La fibra óptica tiene tarifas más altas (~$80-$90 USD/mes), lo que incrementa la sensibilidad al precio en los primeros meses.
+- **Fricción del Cheque Electrónico (`Electronic check`):** Al no ser automático, cada mes el usuario debe tomar la decisión consciente de abonar la factura, lo que propicia la cancelación inmediata. El resultado: un **75.5% de abandono** (332 bajas en 440 clientes).
 
 ---
 
-## 4. Diagnóstico Causal: La Carencia de Soporte Técnico y Seguridad Online
+## 4. Diagnóstico Causal: La Carencia de Asistencia Técnica y Ciberseguridad
 
-¿Por qué se van tan rápido los clientes de fibra óptica? El análisis de servicios complementarios revela una causa operativa directa:
+Al evaluar la adopción de servicios complementarios en este grupo vulnerable, identifico la causa operativa de fondo:
 
 | estado_soporte_tecnico | estado_seguridad_online | total_clientes | clientes_cancelados | tasa_churn_pct | mrr_perdido |
 | ---------------------- | ----------------------- | -------------- | ------------------- | -------------- | ----------- |
@@ -87,15 +90,15 @@ Filtrando exclusivamente la cohorte más vulnerable (contrato mes a mes, antigü
 
 ![Efecto Protector de Soporte y Seguridad](grafico_03_soporte_seguridad.png)
 
-### Hallazgos de la Consulta 3:
-- **Desamparo Técnico:** De los 780 cancelados en el segmento crítico, **593 clientes (el 76%) no contaban con Soporte Técnico ni Seguridad Online**.
-- **Tasa de Abandono Sin Soporte:** Alcanza un dramático **69.0%**, frente a un 39.6% cuando cuentan con protección y asistencia técnica.
+### Conclusiones de este Paso:
+- **Vulnerabilidad Técnica Inicial:** De los 780 clientes fugados, **593 usuarios (el 76%) no contaban con Soporte Técnico ni Seguridad Online**.
+- Quienes carecen de soporte sufren un **69.0% de churn**, mientras que quienes tienen ambos servicios ven reducida la tasa a casi la mitad.
 
 ---
 
-## 5. Simulación de Negocio y Retorno sobre la Inversión (ROI)
+## 5. Modelo Financiero y Retorno sobre la Inversión (ROI)
 
-Para presentar a la dirección general, construimos un modelo financiero proyectando el impacto de una campaña automatizada de retención en el tercer mes.
+Para sustentar la propuesta ante la dirección, construyo una simulación financiera con CTEs evaluando el rescate del 25% de los clientes en riesgo:
 
 | clientes_perdidos_historicos | mrr_perdido_mensual | fuga_ingresos_anuales | meta_clientes_rescatados_25pct | ingreso_anual_protegido | coste_inversion_campana | beneficio_neto_anual_recuperado | roi_campana_pct |
 | ---------------------------- | ------------------- | --------------------- | ------------------------------ | ----------------------- | ----------------------- | ------------------------------- | --------------- |
@@ -103,10 +106,10 @@ Para presentar a la dirección general, construimos un modelo financiero proyect
 
 ![Simulación Financiera y ROI](grafico_04_simulacion_roi.png)
 
-### Propuesta Estratégica (The Retention Playbook):
-1. **Disparador Automatizado (Día 75 / Mes 3):** Identificar a los usuarios de fibra óptica en contrato mensual que pagan por cheque electrónico y carecen de soporte técnico.
-2. **Oferta Comercial de Retención:** Ofrecer un **15% de descuento en la factura durante 6 meses** condicionado a dos factores innegociables:
-   - Migración a contrato con **permanencia anual** (One-year contract).
-   - Domiciliación del pago vía **tarjeta bancaria o cuenta automática** (eliminando la fricción del cheque electrónico).
-3. **Onboarding con Valor Agregado:** Incluir sin coste adicional durante 3 meses el paquete de **Soporte Técnico y Seguridad Web**.
-4. **Impacto Financiero Proyectado:** Rescatando únicamente a 1 de cada 4 clientes en riesgo (25%), la compañía protege **$149,043.90 USD/año**, incurriendo en una inversión comercial de tan solo $11,178.29 USD en descuentos, arrojando un **beneficio neto de $137,865.61 USD** y un **ROI del +1,233%**.
+### Mi Propuesta de Acción (The Retention Strategy):
+1. **Disparador Automatizado (Día 75 / Mes 3):** Identifico en el CRM a los usuarios de fibra óptica en contrato mensual que pagan con cheque electrónico y no tienen soporte técnico.
+2. **Incentivo Vinculado:** Ofrezco un **15% de descuento durante 6 meses** condicionado a dos condiciones comerciales:
+   - Aceptación de un **contrato de permanencia anual (One-year contract)**.
+   - Domiciliación del cobro mediante **tarjeta bancaria o cuenta bancaria automática** (eliminando la fricción mensual del cheque electrónico).
+3. **Kit de Onboarding y Fidelización:** Incluyo durante los primeros 3 meses el servicio de **Soporte Técnico y Seguridad Web** sin coste adicional para reducir la fricción de instalación.
+4. **Rentabilidad Neta:** Con una meta prudente de rescatar solo a 1 de cada 4 clientes en riesgo (25%), protejo **$149,043.90 USD/año**, invirtiendo apenas $11,178.29 USD en descuentos, lo que genera un **beneficio neto de $137,865.61 USD** y un **ROI del +1,233.3%**.
