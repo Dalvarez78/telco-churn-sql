@@ -1,0 +1,13 @@
+tipo_contrato,rango_antiguedad,total_clientes,clientes_cancelados,tasa_churn_pct,ingresos_mensuales_perdidos
+Month-to-month,0-6 meses,1413,780,55.2,49681.3
+Month-to-month,Más de 2 años,1144,353,30.9,30565.35
+Month-to-month,1-2 años,737,278,37.7,21980.3
+Month-to-month,7-12 meses,581,244,42.0,18620.15
+One year,Más de 2 años,1152,137,11.9,12364.3
+Two year,Más de 2 años,1537,48,3.1,4165.3
+One year,1-2 años,197,16,8.1,1101.35
+One year,7-12 meses,85,9,10.6,438.0
+One year,0-6 meses,39,4,10.3,214.8
+Two year,0-6 meses,29,0,0.0,0.0
+Two year,1-2 años,90,0,0.0,0.0
+Two year,7-12 meses,39,0,0.0,0.0

@@ -1,0 +1,13 @@
+servicio_internet,metodo_pago,total_clientes,cancelaciones,tasa_churn_pct
+Fiber optic,Bank transfer (automatic),41,38,92.7
+Fiber optic,Electronic check,440,332,75.5
+Fiber optic,Credit card (automatic),42,29,69.0
+Fiber optic,Mailed check,96,60,62.5
+DSL,Electronic check,209,119,56.9
+DSL,Mailed check,192,87,45.3
+DSL,Bank transfer (automatic),42,18,42.9
+DSL,Credit card (automatic),52,21,40.4
+No,Electronic check,31,9,29.0
+No,Mailed check,216,57,26.4
+No,Bank transfer (automatic),27,7,25.9
+No,Credit card (automatic),25,3,12.0

@@ -1,0 +1,6 @@
+estado_soporte_tecnico,estado_seguridad_online,total_clientes,clientes_cancelados,tasa_churn_pct,mrr_perdido
+Sin Soporte Técnico,Sin Seguridad Online,860,593,69.0,40638.4
+Sin Internet,Sin Internet,299,76,25.4,1531.5
+Con Soporte Técnico,Sin Seguridad Online,116,56,48.3,4004.8
+Sin Soporte Técnico,Con Seguridad Online,106,42,39.6,2684.5
+Con Soporte Técnico,Con Seguridad Online,32,13,40.6,822.1

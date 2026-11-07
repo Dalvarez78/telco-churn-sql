@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+env/
+venv/
+ENV/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# Distribución / Builds
+build/
+dist/
+*.egg-info/
+
+# Archivos de entorno y SO
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Base de datos SQLite (se puede regenerar con python cargar_datos.py)
+# Descomentar si no se desea trackear telco_churn.db en git
+# *.db
