@@ -123,3 +123,4 @@ A través de una consulta SQL con expresiones de tabla comunes (`WITH ... CTE`),
 ---
 
 *Informe elaborado con análisis reproducible en SQLite y Python. Para consultar el código y las consultas SQL completas, revise el repositorio.*
+
