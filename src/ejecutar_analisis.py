@@ -212,3 +212,4 @@ def generar_informe_markdown(carpeta_salidas: Path, resultados: dict):
         archivo.write("   - Domiciliación del pago vía **tarjeta bancaria o cuenta automática** (eliminando la fricción del cheque electrónico).\n")
         archivo.write("3. **Onboarding con Valor Agregado:** Incluir sin coste adicional durante 3 meses el paquete de **Soporte Técnico y Seguridad Web**.\n")
         archivo.write("4. **Impacto Financiero Proyectado:** Rescatando únicamente a 1 de cada 4 clientes en riesgo (25%), la compañía protege **$149,043.90 USD/año**, incurriendo en una inversión comercial de tan solo $11,178.29 USD en descuentos, arrojando un **beneficio neto de $137,865.61 USD** y un **ROI del +1,233%**.\n")
+

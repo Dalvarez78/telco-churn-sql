@@ -249,3 +249,4 @@ def generar_todas_las_visualizaciones(ruta_bd: Path = None, carpeta_salidas: Pat
 
 if __name__ == "__main__":
     generar_todas_las_visualizaciones()
+

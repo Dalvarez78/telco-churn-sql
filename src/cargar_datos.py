@@ -89,3 +89,4 @@ def cargar_base_datos(verbose: bool = True) -> Path:
 
 if __name__ == "__main__":
     cargar_base_datos()
+

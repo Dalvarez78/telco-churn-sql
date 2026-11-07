@@ -36,3 +36,4 @@ SELECT
             ((clientes_fugados * 0.25) * (cuota_mensual_promedio * 0.15) * 6)) / 
            ((clientes_fugados * 0.25) * (cuota_mensual_promedio * 0.15) * 6)) * 100, 1) AS roi_campana_pct
 FROM metricas_segmento_critico;
+

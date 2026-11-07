@@ -25,3 +25,4 @@ WHERE Contract = 'Month-to-month'
   AND tenure <= 6
 GROUP BY 1, 2
 ORDER BY clientes_cancelados DESC;
+

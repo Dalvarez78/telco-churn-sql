@@ -21,3 +21,4 @@ SELECT
 FROM telco_churn
 GROUP BY 1, 2
 ORDER BY ingresos_mensuales_perdidos DESC;
+

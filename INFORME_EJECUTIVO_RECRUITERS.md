@@ -80,3 +80,4 @@ A través de consultas multidimensionales descubro que el segmento más sangrant
 ---
 
 *Desarrollado con rigor analítico, buenas prácticas de ingeniería de software y enfoque directo al valor de negocio.*
+

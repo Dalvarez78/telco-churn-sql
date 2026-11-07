@@ -18,3 +18,4 @@ WHERE Contract = 'Month-to-month'
   AND tenure <= 6
 GROUP BY 1, 2
 ORDER BY cancelaciones DESC, tasa_churn_pct DESC;
+
