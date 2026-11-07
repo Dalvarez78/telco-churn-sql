@@ -1,13 +1,6 @@
 """
-Módulo: src.generar_visualizaciones
-Descripción: Generación de visualizaciones ejecutivas de alta resolución (300 DPI)
-utilizando la paleta de identidad visual del portfolio (David Álvarez Data Science):
-- Navy (#18203a): Textos principales, ejes y tipografía
-- Muted Slate (#536083): Subtítulos, métricas secundarias y cuadrícula
-- Cobalt Blue (#3054de): Color principal de datos y contraste
-- Coral / Red (#ff7869 / #FE3F21): Indicador de alerta crítica y churn
-- Electric Lime (#c8ff48): Indicador de alto impacto, beneficio y ROI
-- Periwinkle / Lavender (#8296eb, #c9b8ff, #b9d9ff): Categorías complementarias
+Generación de gráficos para el análisis de retención de clientes.
+Colores extraídos del CSS del proyecto.
 """
 
 import sqlite3
@@ -16,28 +9,25 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-# Paleta oficial extraída de https://alvarez-data-discovery.lovable.app/
+# Variables del CSS del portfolio
 COLOR_NAVY = "#18203a"
-COLOR_SLATE = "#536083"
+COLOR_MUTED = "#536083"
 COLOR_COBALT = "#3054de"
 COLOR_CORAL = "#ff7869"
-COLOR_CORAL_DARK = "#FE3F21"
 COLOR_LIME = "#c8ff48"
 COLOR_PERIWINKLE = "#8296eb"
-COLOR_LAVENDER = "#c9b8ff"
 COLOR_SOFT_BLUE = "#b9d9ff"
-COLOR_BG = "#ffffff"
+COLOR_LAVENDER = "#c9b8ff"
 COLOR_GRID = "#18203a18"
 
 
 def configurar_estilo():
-    """Aplica el estilo editorial y limpio del portfolio."""
     plt.rcParams["font.sans-serif"] = ["Segoe UI", "DejaVu Sans", "Helvetica", "sans-serif"]
     plt.rcParams["font.family"] = "sans-serif"
-    plt.rcParams["figure.facecolor"] = COLOR_BG
-    plt.rcParams["axes.facecolor"] = COLOR_BG
-    plt.rcParams["axes.edgecolor"] = "#18203a33"
-    plt.rcParams["axes.linewidth"] = 1.0
+    plt.rcParams["figure.facecolor"] = "#ffffff"
+    plt.rcParams["axes.facecolor"] = "#ffffff"
+    plt.rcParams["axes.edgecolor"] = "#18203a28"
+    plt.rcParams["axes.linewidth"] = 0.9
 
 
 def generar_grafico_1(conexion: sqlite3.Connection, ruta_salida: Path):
@@ -66,9 +56,8 @@ def generar_grafico_1(conexion: sqlite3.Connection, ruta_salida: Path):
     """
     df = pd.read_sql_query(query, conexion)
 
-    fig, ax = plt.subplots(figsize=(10, 5.5), dpi=300)
+    fig, ax = plt.subplots(figsize=(10, 5.4), dpi=300)
 
-    # El foco crítico en coral vibrante (#ff7869), contratos mes a mes en cobalt (#3054de) y periwinkle (#8296eb)
     colores = [
         COLOR_CORAL if i == 0 else
         COLOR_COBALT if i in [1, 2] else
@@ -77,11 +66,11 @@ def generar_grafico_1(conexion: sqlite3.Connection, ruta_salida: Path):
         for i in range(len(df))
     ]
 
-    barras = ax.bar(df["segmento"], df["mrr_perdido"], color=colores, width=0.58, edgecolor=COLOR_NAVY, linewidth=1.2)
+    barras = ax.bar(df["segmento"], df["mrr_perdido"], color=colores, width=0.58, edgecolor=COLOR_NAVY, linewidth=1.1)
 
-    ax.set_ylabel("Fuga Mensual de Ingresos ($ USD / mes)", fontsize=11, fontweight="bold", color=COLOR_NAVY)
-    ax.set_title("Fuga de Ingresos (MRR) por Tipo de Contrato y Antigüedad", fontsize=13, fontweight="bold", pad=16, color=COLOR_NAVY)
-    ax.grid(axis="y", linestyle="--", alpha=0.5, color=COLOR_SLATE)
+    ax.set_ylabel("Fuga Mensual de Ingresos ($ USD)", fontsize=11, fontweight="bold", color=COLOR_NAVY)
+    ax.set_title("Fuga de Ingresos (MRR) por Tipo de Contrato y Antigüedad", fontsize=13, fontweight="bold", pad=15, color=COLOR_NAVY)
+    ax.grid(axis="y", linestyle="--", alpha=0.5, color=COLOR_MUTED)
     ax.tick_params(colors=COLOR_NAVY, labelsize=9)
     plt.xticks(rotation=18, ha="right")
 
@@ -95,19 +84,19 @@ def generar_grafico_1(conexion: sqlite3.Connection, ruta_salida: Path):
             ha="center",
             va="bottom",
             fontsize=8.5,
-            fontweight="bold" if i == 0 else "bold",
-            color=COLOR_CORAL_DARK if i == 0 else COLOR_NAVY
+            fontweight="bold",
+            color=COLOR_CORAL if i == 0 else COLOR_NAVY
         )
 
     ax.set_ylim(0, max(df["mrr_perdido"]) * 1.22)
     plt.tight_layout()
     fig.savefig(ruta_salida, dpi=300)
     plt.close(fig)
-    print(f"  ✔ Gráfico 1 generado con paleta de marca: {ruta_salida.name}")
+    print(f"  - {ruta_salida.name} (fuga de ingresos por contrato)")
 
 
 def generar_grafico_2(conexion: sqlite3.Connection, ruta_salida: Path):
-    """Gráfico 2: Tasa de churn en clientes de 0 a 6 meses según servicio y pago."""
+    """Gráfico 2: Churn en clientes de 0 a 6 meses según servicio y método de pago."""
     query = """
     SELECT 
         InternetService || ' + ' || PaymentMethod AS combinacion,
@@ -122,21 +111,21 @@ def generar_grafico_2(conexion: sqlite3.Connection, ruta_salida: Path):
     """
     df = pd.read_sql_query(query, conexion)
 
-    fig, ax = plt.subplots(figsize=(10.5, 6.2), dpi=300)
+    fig, ax = plt.subplots(figsize=(10.5, 6.0), dpi=300)
 
     colores = [
         COLOR_CORAL if "Fiber optic + Electronic check" in c else
         COLOR_PERIWINKLE if "Fiber" in c else
         COLOR_SOFT_BLUE if "DSL" in c else
-        "#e8ebf2"
+        "#e5e8f0"
         for c in df["combinacion"]
     ]
 
-    barras = ax.barh(df["combinacion"], df["tasa_churn"], color=colores, height=0.65, edgecolor=COLOR_NAVY, linewidth=1.1)
+    barras = ax.barh(df["combinacion"], df["tasa_churn"], color=colores, height=0.65, edgecolor=COLOR_NAVY, linewidth=1.0)
 
     ax.set_xlabel("Tasa de Abandono (Churn %)", fontsize=11, fontweight="bold", color=COLOR_NAVY)
-    ax.set_title("Segmento Crítico (0-6 meses sin permanencia): Churn por Servicio y Pago", fontsize=13, fontweight="bold", pad=16, color=COLOR_NAVY)
-    ax.grid(axis="x", linestyle="--", alpha=0.5, color=COLOR_SLATE)
+    ax.set_title("Segmento Crítico (0-6 meses): Churn por Servicio y Método de Pago", fontsize=13, fontweight="bold", pad=15, color=COLOR_NAVY)
+    ax.grid(axis="x", linestyle="--", alpha=0.5, color=COLOR_MUTED)
     ax.tick_params(colors=COLOR_NAVY, labelsize=9)
 
     for barra, total, canc in zip(barras, df["total"], df["cancelaciones"]):
@@ -150,14 +139,14 @@ def generar_grafico_2(conexion: sqlite3.Connection, ruta_salida: Path):
             va="center",
             fontsize=8.5,
             fontweight="bold" if es_critico else "normal",
-            color=COLOR_CORAL_DARK if es_critico else COLOR_NAVY
+            color=COLOR_CORAL if es_critico else COLOR_NAVY
         )
 
     ax.set_xlim(0, 106)
     plt.tight_layout()
     fig.savefig(ruta_salida, dpi=300)
     plt.close(fig)
-    print(f"  ✔ Gráfico 2 generado con paleta de marca: {ruta_salida.name}")
+    print(f"  - {ruta_salida.name} (churn por servicio y método de pago)")
 
 
 def generar_grafico_3(conexion: sqlite3.Connection, ruta_salida: Path):
@@ -181,13 +170,13 @@ def generar_grafico_3(conexion: sqlite3.Connection, ruta_salida: Path):
     """
     df = pd.read_sql_query(query, conexion)
 
-    fig, ax = plt.subplots(figsize=(9, 5.2), dpi=300)
+    fig, ax = plt.subplots(figsize=(9, 5.0), dpi=300)
     colores = [COLOR_CORAL, COLOR_PERIWINKLE, COLOR_LAVENDER, COLOR_COBALT]
-    barras = ax.bar(df["categoria"], df["tasa_churn"], color=colores, width=0.55, edgecolor=COLOR_NAVY, linewidth=1.2)
+    barras = ax.bar(df["categoria"], df["tasa_churn"], color=colores, width=0.55, edgecolor=COLOR_NAVY, linewidth=1.1)
 
     ax.set_ylabel("Tasa de Churn (%)", fontsize=11, fontweight="bold", color=COLOR_NAVY)
-    ax.set_title("Efecto Protector de Servicios de Soporte y Seguridad (Nuevos Clientes)", fontsize=13, fontweight="bold", pad=16, color=COLOR_NAVY)
-    ax.grid(axis="y", linestyle="--", alpha=0.5, color=COLOR_SLATE)
+    ax.set_title("Efecto Protector de Soporte Técnico y Seguridad Online", fontsize=13, fontweight="bold", pad=15, color=COLOR_NAVY)
+    ax.grid(axis="y", linestyle="--", alpha=0.5, color=COLOR_MUTED)
     ax.tick_params(colors=COLOR_NAVY, labelsize=9)
     plt.xticks(fontweight="bold")
 
@@ -209,7 +198,7 @@ def generar_grafico_3(conexion: sqlite3.Connection, ruta_salida: Path):
     plt.tight_layout()
     fig.savefig(ruta_salida, dpi=300)
     plt.close(fig)
-    print(f"  ✔ Gráfico 3 generado con paleta de marca: {ruta_salida.name}")
+    print(f"  - {ruta_salida.name} (impacto de soporte técnico y seguridad)")
 
 
 def generar_grafico_4(conexion: sqlite3.Connection, ruta_salida: Path):
@@ -217,20 +206,18 @@ def generar_grafico_4(conexion: sqlite3.Connection, ruta_salida: Path):
     conceptos = [
         "Fuga Anual\nActual (100%)",
         "Ingreso Anual\nRecuperado (25%)",
-        "Coste de Inversión\nCampaña (6 meses)",
-        "Beneficio Neto\nRecuperado (Año 1)"
+        "Coste Campaña\n(6 meses)",
+        "Beneficio Neto\n(Año 1)"
     ]
     montos = [596175.60, 149043.90, 11178.29, 137865.61]
-    
-    # Paleta del portfolio: Slate, Cobalt, Coral y Electric Lime para el Beneficio Neto con ROI
-    colores = [COLOR_SLATE, COLOR_COBALT, COLOR_CORAL, COLOR_LIME]
+    colores = [COLOR_MUTED, COLOR_COBALT, COLOR_CORAL, COLOR_LIME]
 
-    fig, ax = plt.subplots(figsize=(9.5, 5.8), dpi=300)
-    barras = ax.bar(conceptos, montos, color=colores, width=0.55, edgecolor=COLOR_NAVY, linewidth=1.3)
+    fig, ax = plt.subplots(figsize=(9.2, 5.5), dpi=300)
+    barras = ax.bar(conceptos, montos, color=colores, width=0.55, edgecolor=COLOR_NAVY, linewidth=1.2)
 
     ax.set_ylabel("Valor Económico ($ USD)", fontsize=11, fontweight="bold", color=COLOR_NAVY)
-    ax.set_title("Simulación Financiera y Retorno de Inversión (ROI)", fontsize=13, fontweight="bold", pad=16, color=COLOR_NAVY)
-    ax.grid(axis="y", linestyle="--", alpha=0.5, color=COLOR_SLATE)
+    ax.set_title("Simulación Financiera y Retorno de Inversión (ROI)", fontsize=13, fontweight="bold", pad=15, color=COLOR_NAVY)
+    ax.grid(axis="y", linestyle="--", alpha=0.5, color=COLOR_MUTED)
     ax.tick_params(colors=COLOR_NAVY, labelsize=9)
 
     for i, (barra, monto) in enumerate(zip(barras, montos)):
@@ -254,11 +241,11 @@ def generar_grafico_4(conexion: sqlite3.Connection, ruta_salida: Path):
     plt.tight_layout()
     fig.savefig(ruta_salida, dpi=300)
     plt.close(fig)
-    print(f"  ✔ Gráfico 4 generado con paleta de marca: {ruta_salida.name}")
+    print(f"  - {ruta_salida.name} (simulación financiera y ROI)")
 
 
 def generar_todas_las_visualizaciones(ruta_bd: Path = None, carpeta_salidas: Path = None):
-    """Ejecuta la generación completa de gráficos con la paleta oficial."""
+    """Ejecuta la generación de los cuatro gráficos."""
     directorio_raiz = Path(__file__).resolve().parent.parent
     if ruta_bd is None:
         ruta_bd = directorio_raiz / "telco_churn.db"
@@ -268,11 +255,9 @@ def generar_todas_las_visualizaciones(ruta_bd: Path = None, carpeta_salidas: Pat
     carpeta_salidas.mkdir(parents=True, exist_ok=True)
 
     if not ruta_bd.exists():
-        raise FileNotFoundError(f"No existe la base de datos en {ruta_bd}. Ejecuta primero cargar_datos.py.")
+        raise FileNotFoundError(f"No existe la base de datos en {ruta_bd}.")
 
-    print("=" * 70)
-    print(" GENERACIÓN DE VISUALIZACIONES CON PALETA OFICIAL DE MARCA ")
-    print("=" * 70)
+    print("Generando gráficos...")
 
     configurar_estilo()
     conexion = sqlite3.connect(ruta_bd)
@@ -283,7 +268,7 @@ def generar_todas_las_visualizaciones(ruta_bd: Path = None, carpeta_salidas: Pat
     generar_grafico_4(conexion, carpeta_salidas / "grafico_04_simulacion_roi.png")
 
     conexion.close()
-    print("✔ Visualizaciones exportadas con la paleta de la web en outputs/.\n")
+    print("Gráficos guardados en outputs/.\n")
 
 
 if __name__ == "__main__":

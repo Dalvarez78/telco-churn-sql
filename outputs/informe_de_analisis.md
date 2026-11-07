@@ -1,14 +1,14 @@
 # Informe Ejecutivo: Análisis Estratégico de Retención y Fuga de Ingresos
 
 > **Autor:** David Álvarez  
-> **Especialidad:** Análisis de Datos & Ingeniería Analítica  
-> **Objetivo:** *Identificar con precisión quirúrgica el foco principal de pérdida de ingresos recurrentes (MRR) por abandono de clientes en telecomunicaciones y modelar una estrategia cuantitativa de retención de alto retorno.*
+> **Especialidad:** Análisis de Datos & Estrategia Cuantitativa  
+> **Objetivo:** *Identificar el foco principal de pérdida de ingresos recurrentes (MRR) por abandono de clientes en telecomunicaciones y modelar una estrategia cuantitativa de retención.*
 
 ---
 
 ## 1. Contexto de Negocio y Pregunta Central
 
-En la industria de suscripciones, retener a un cliente existente es considerablemente más rentable que adquirir uno nuevo. En este análisis examino el comportamiento de **7,043 clientes** de telecomunicaciones mediante SQL relacional y Python para responder a una necesidad comercial crítica:
+En este análisis examino el comportamiento de **7,043 clientes** de telecomunicaciones mediante SQL relacional y Python para responder a una necesidad comercial crítica:
 
 * **Pregunta Central:** ¿Qué combinación de tipo de contrato y antigüedad concentra la mayor fuga mensual de ingresos (MRR), qué factores operativos la causan y cuál es el impacto financiero neto de una campaña de retención proactiva?
 
@@ -24,7 +24,7 @@ En la industria de suscripciones, retener a un cliente existente es considerable
 
 ## 2. Fuga de Ingresos por Tipo de Contrato y Antigüedad
 
-Analizo el impacto económico mensual según el tipo de permanencia y el rango de permanencia en meses del cliente:
+Analizo el impacto económico mensual según el tipo de permanencia y el rango de meses del cliente:
 
 | tipo_contrato  | rango_antiguedad | total_clientes | clientes_cancelados | tasa_churn_pct | ingresos_mensuales_perdidos | pct_del_total_fuga |
 | -------------- | ---------------- | -------------- | ------------------- | -------------- | --------------------------- | ------------------ |
@@ -45,7 +45,7 @@ Analizo el impacto económico mensual según el tipo de permanencia y el rango d
 
 ### Conclusiones de este Paso:
 - **Concentración Crítica:** Más de un tercio de las pérdidas de dinero de la compañía proviene de usuarios sin permanencia en su primer semestre.
-- **Efecto Blindaje de la Permanencia:** En contratos anuales y bianuales, el abandono cae por debajo del 12% y 3% respectivamente, demostrando que asegurar la permanencia es el mecanismo de retención más sólido.
+- **Efecto Blindaje de la Permanencia:** En contratos anuales y bianuales, el abandono cae por debajo del 12% y 3% respectivamente.
 
 ---
 
@@ -71,8 +71,8 @@ Aislando exclusivamente la cohorte vulnerable (contrato mes a mes y $\le$ 6 mese
 ![Segmento Crítico por Servicio y Pago](grafico_02_segmento_riesgo_pago.png)
 
 ### Conclusiones de este Paso:
-- **Impacto de la Tarifa de Fibra:** La fibra óptica tiene tarifas más altas (~$80-$90 USD/mes), lo que incrementa la sensibilidad al precio en los primeros meses.
-- **Fricción del Cheque Electrónico (`Electronic check`):** Al no ser automático, cada mes el usuario debe tomar la decisión consciente de abonar la factura, lo que propicia la cancelación inmediata. El resultado: un **75.5% de abandono** (332 bajas en 440 clientes).
+- **Impacto de la Tarifa de Fibra:** La fibra óptica tiene tarifas más altas (~$80-$90 USD/mes), incrementando la sensibilidad al precio.
+- **Fricción del Cheque Electrónico (`Electronic check`):** Al no ser automático, cada mes el usuario debe tomar la decisión consciente de abonar la factura, facilitando la cancelación (abandono del 75.5%).
 
 ---
 
@@ -98,7 +98,7 @@ Al evaluar la adopción de servicios complementarios en este grupo vulnerable, i
 
 ## 5. Modelo Financiero y Retorno sobre la Inversión (ROI)
 
-Para sustentar la propuesta ante la dirección, construyo una simulación financiera con CTEs evaluando el rescate del 25% de los clientes en riesgo:
+Simulación financiera con CTEs evaluando el rescate del 25% de los clientes en riesgo:
 
 | clientes_perdidos_historicos | mrr_perdido_mensual | fuga_ingresos_anuales | meta_clientes_rescatados_25pct | ingreso_anual_protegido | coste_inversion_campana | beneficio_neto_anual_recuperado | roi_campana_pct |
 | ---------------------------- | ------------------- | --------------------- | ------------------------------ | ----------------------- | ----------------------- | ------------------------------- | --------------- |
@@ -106,10 +106,10 @@ Para sustentar la propuesta ante la dirección, construyo una simulación financ
 
 ![Simulación Financiera y ROI](grafico_04_simulacion_roi.png)
 
-### Mi Propuesta de Acción (The Retention Strategy):
+### Plan de Acción Propuesto:
 1. **Disparador Automatizado (Día 75 / Mes 3):** Identifico en el CRM a los usuarios de fibra óptica en contrato mensual que pagan con cheque electrónico y no tienen soporte técnico.
 2. **Incentivo Vinculado:** Ofrezco un **15% de descuento durante 6 meses** condicionado a dos condiciones comerciales:
    - Aceptación de un **contrato de permanencia anual (One-year contract)**.
-   - Domiciliación del cobro mediante **tarjeta bancaria o cuenta bancaria automática** (eliminando la fricción mensual del cheque electrónico).
-3. **Kit de Onboarding y Fidelización:** Incluyo durante los primeros 3 meses el servicio de **Soporte Técnico y Seguridad Web** sin coste adicional para reducir la fricción de instalación.
-4. **Rentabilidad Neta:** Con una meta prudente de rescatar solo a 1 de cada 4 clientes en riesgo (25%), protejo **$149,043.90 USD/año**, invirtiendo apenas $11,178.29 USD en descuentos, lo que genera un **beneficio neto de $137,865.61 USD** y un **ROI del +1,233.3%**.
+   - Domiciliación del cobro mediante **tarjeta bancaria o cuenta bancaria automática**.
+3. **Kit de Onboarding y Fidelización:** Incluyo durante los primeros 3 meses el servicio de **Soporte Técnico y Seguridad Web** sin coste adicional.
+4. **Rentabilidad Neta:** Con una meta de rescatar al 25% de los clientes en riesgo, protejo **$149,043.90 USD/año**, invirtiendo $11,178.29 USD en descuentos, lo que genera un **beneficio neto de $137,865.61 USD** y un **ROI del +1,233.3%**.
